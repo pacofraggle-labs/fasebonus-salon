@@ -1,0 +1,28 @@
+template: images/marcador-tron.png
+doc-type: marcador
+output-suffix: -TronBar
+font: Cosmic Alien
+font-size: 18
+colour: white
+element:
+  - name:
+      x: 161
+      y: 57
+      font-size: 22
+  - morado:
+      x: 34
+      y: 21
+  - amarillo:
+      x: 106
+      y: 21
+  - azul:
+      x: 34
+      y: 52
+  - naranja:
+      x: 106
+      y: 52
+  - participaciones:
+      x: 255
+      y: 26
+      font-size: 32
+      colour: black
