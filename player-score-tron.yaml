@@ -1,6 +1,6 @@
 template: images/marcador-tron.png
 doc-type: marcador
-output-suffix: -TronBar
+output-suffix: -bar
 font: Cosmic Alien
 font-size: 18
 colour: white
