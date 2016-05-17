@@ -1,4 +1,4 @@
-package es.pacofraggle.fasebonus.salon;
+package es.pacofraggle.commons;
 
 import org.yaml.snakeyaml.Yaml;
 

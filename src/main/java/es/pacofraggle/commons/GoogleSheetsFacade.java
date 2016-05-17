@@ -1,4 +1,4 @@
-package es.pacofraggle.fasebonus.salon;
+package es.pacofraggle.commons;
 
 import java.io.*;
 import java.net.URL;
@@ -15,7 +15,7 @@ public class GoogleSheetsFacade {
       URL doc = new URL("https://docs.google.com/spreadsheets/d/"+id+"/export?format=csv&id="+id+"&gid=0");
       isr = new InputStreamReader(doc.openStream());
       in = new BufferedReader(isr);
-      ofw = new FileWriter(outputFolder+"/"+filename);
+      ofw = new FileWriter(outputFolder+File.separator+filename);
       out = new PrintWriter(ofw);
       String inputLine;
       while ((inputLine = in.readLine()) != null) {
