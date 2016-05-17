@@ -14,7 +14,7 @@ public class StatsWriter {
 
   public StatsWriter(String title, String outputFolder, String filename) {
     this.title = title;
-    this.file = outputFolder+"/"+filename;
+    this.file = outputFolder+File.separator+filename;
   }
 
   public String top(String[] group, int[] value) {

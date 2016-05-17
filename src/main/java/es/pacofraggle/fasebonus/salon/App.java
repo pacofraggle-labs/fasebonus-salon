@@ -1,5 +1,8 @@
 package es.pacofraggle.fasebonus.salon;
 
+import es.pacofraggle.commons.GoogleSheetsFacade;
+import es.pacofraggle.commons.Msgs;
+import es.pacofraggle.commons.YAMLReader;
 import es.pacofraggle.fasebonus.salon.model.Event;
 import es.pacofraggle.fasebonus.salon.model.Game;
 import es.pacofraggle.fasebonus.salon.model.Participation;
@@ -20,6 +23,8 @@ public class App {
   private YAMLReader yaml;
   private Properties properties;
   private ImageWriter img;
+
+  public static Msgs log = new Msgs(Msgs.DEBUG, true);
 
   private static String[] imageExtensions = new String[]{"", ".jpg", ".jpeg", ".png", ".gif"};
 
@@ -87,7 +92,7 @@ public class App {
     int[] value = new int[rows];
     for(int i = 0; i< rows; i++) {
       value[i] = players[i].getBadges().get(badge);
-      group[i] = App.findImage("images/avatar/"+players[i].getAvatarName()).getAbsolutePath();
+      group[i] = App.findImage("images"+File.separator+"avatar"+File.separator+players[i].getAvatarName()).getAbsolutePath();
     }
 
     StatsWriter stats = new StatsWriter(title, outputFolder, filename);
@@ -212,14 +217,14 @@ public class App {
         String key = (String) elm.keySet().iterator().next();
         Map data = (Map) elm.get(key);
         if ("banner".equals(key)) {
-          data.put("value", App.findImage("images/games/"+game.getAvatarName()));
+          data.put("value", App.findImage("images"+File.separator+"games"+File.separator+game.getAvatarName()));
           data.put("type", "image");
         } else if (key.startsWith("avatar")) {
           int idx = Integer.parseInt(key.replaceFirst("avatar", ""))-1;
           if (idx < ranking.length) {
             Participation p = ranking[idx];
             data.put("type", "image");
-            data.put("value", App.findImage("images/avatar/"+p.getPlayer().getAvatarName()).getAbsolutePath());
+            data.put("value", App.findImage("images"+File.separator+"avatar"+File.separator+p.getPlayer().getAvatarName()).getAbsolutePath());
           } else {
             data.put("type", "discard");
           }
