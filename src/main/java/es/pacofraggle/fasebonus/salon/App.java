@@ -10,10 +10,7 @@ import es.pacofraggle.fasebonus.salon.model.Player;
 import es.pacofraggle.fasebonus.salon.vo.Badges;
 import es.pacofraggle.fasebonus.salon.vo.GraphicProperties;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -34,9 +31,10 @@ public class App {
     yaml = new YAMLReader();
     img = new ImageWriter();
 
-    readProperties();
 
     try {
+      readProperties();
+
       String outputFolder ="tmp";
       File f = new File(outputFolder);
       if (!f.exists()) {
@@ -46,10 +44,10 @@ public class App {
       String suffix = new SimpleDateFormat("yyyyMMdd_HHmm").format(new Date());
       String filename = "salon-"+suffix+".csv";
 
-      System.out.println("Reading Google Drive into "+filename);
-      filename = "salon-20160515_0822.csv"; // google.getSpreadsheet("1tVbnW2dGVZhxR_BnD4C7GrSENOpz0AEZ1jVMNUwuNBU", outputFolder, filename);
+      App.log.info("Reading Google Drive into " + filename);
+      filename = /*"salon-20160515_0822.csv";*/ google.getSpreadsheet((String) properties.get("googlesheet"), outputFolder, filename);
 
-      System.out.println("Loading "+filename+" into the database");
+      App.log.info("Loading " + filename + " into the database");
       csv.read(outputFolder+"/"+filename);
 
       Player[] players = Player.findAll();
@@ -63,10 +61,10 @@ public class App {
       //playerScore(player, false, "player-score-tron.yaml", outputFolder);
 
       Event event = Event.find("21");
-      System.out.println(event);
+      App.log.debug(event);
       Game[] list = Game.findAll(event);
       for(Game game : list) {
-        System.out.println("  "+game.getName()+" "+game.getSystem()+" "+game.getCategory());
+        App.log.debug("  " + game.getName() + " " + game.getSystem() + " " + game.getCategory());
         eventGameScore(game, event, "ranking.yaml", outputFolder);
       }
 
@@ -77,7 +75,7 @@ public class App {
         statisticsImage(badge, "Salón Recreativo FaseBonus Top Ten "+badge+" - "+suffix, outputFolder, filename);
       }
     } catch (Exception e) {
-      e.printStackTrace();
+      App.log.error(e);
     }
 
   }
@@ -92,7 +90,7 @@ public class App {
     int[] value = new int[rows];
     for(int i = 0; i< rows; i++) {
       value[i] = players[i].getBadges().get(badge);
-      group[i] = App.findImage("images"+File.separator+"avatar"+File.separator+players[i].getAvatarName()).getAbsolutePath();
+      group[i] = App.findImage(properties.get("avatar-folder")+File.separator+players[i].getAvatarName()).getAbsolutePath();
     }
 
     StatsWriter stats = new StatsWriter(title, outputFolder, filename);
@@ -100,14 +98,20 @@ public class App {
     return output;
   }
 
-  public void readProperties() {
+  public void readProperties() throws IOException {
     properties = new Properties();
     InputStream fis = null;
     try {
       fis = new FileInputStream("config.properties");
       properties.load(fis);
-    } catch (IOException e) {
+      String prop = (String) properties.get("avatar-folder");
+      properties.put("avatar-folder",
+        prop == null ? "images" + File.separator + "avatar" : prop.replaceAll("/", File.separator).replaceAll("\\\\", File.separator));
+      prop = (String) properties.get("games-folder");
+      properties.put("games-folder",
+        prop == null ? "images"+File.separator+"games" : prop.replaceAll("/", File.separator).replaceAll("\\\\", File.separator));
 
+      App.log.debug(properties);
     } finally {
       try {
         if (fis != null) {
@@ -118,7 +122,7 @@ public class App {
   }
 
   public String playerScore(Player player, boolean calculateBadges, String yml, String outputFolder) {
-    System.out.println("playerScore for "+player);
+    App.log.info("playerScore for "+player);
     Badges badges = calculateBadges ? player.sumBadges() : player.getBadges();
 
     if (badges.isEmpty()) {
@@ -217,14 +221,14 @@ public class App {
         String key = (String) elm.keySet().iterator().next();
         Map data = (Map) elm.get(key);
         if ("banner".equals(key)) {
-          data.put("value", App.findImage("images"+File.separator+"games"+File.separator+game.getAvatarName()));
+          data.put("value", App.findImage(properties.get("games-folder")+File.separator+game.getAvatarName()));
           data.put("type", "image");
         } else if (key.startsWith("avatar")) {
           int idx = Integer.parseInt(key.replaceFirst("avatar", ""))-1;
           if (idx < ranking.length) {
             Participation p = ranking[idx];
             data.put("type", "image");
-            data.put("value", App.findImage("images"+File.separator+"avatar"+File.separator+p.getPlayer().getAvatarName()).getAbsolutePath());
+            data.put("value", App.findImage(properties.get("avatar-folder")+File.separator+p.getPlayer().getAvatarName()));
           } else {
             data.put("type", "discard");
           }

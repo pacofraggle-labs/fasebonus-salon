@@ -19,7 +19,7 @@ public class StatsWriter {
 
   public String top(String[] group, int[] value) {
     try {
-      System.out.println(title);
+      App.log.debug(title);
       int max = -1;
       for(int v : value) {
         if (v > max) {
@@ -37,7 +37,7 @@ public class StatsWriter {
       for(int i=0, iniY = 80; i<group.length; i++, iniY+=150) {
         img.applyImage(g, 20, iniY+128, 148, iniY, group[i]);
         int pos = Math.round(((float) value[i] / (float) max)*1000.0f);
-        System.out.println("  "+group[i]+" "+value[i]+" "+pos);
+        App.log.debug("  "+group[i]+" "+value[i]+" "+pos);
         g.setColor(darkBlue);
         img.applyRectangle(g, 160, iniY + 90, 160 + pos, iniY + 20);
         g.setColor(Color.BLACK);
