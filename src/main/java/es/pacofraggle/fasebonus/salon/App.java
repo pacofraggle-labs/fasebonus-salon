@@ -1,5 +1,6 @@
 package es.pacofraggle.fasebonus.salon;
 
+import es.pacofraggle.commons.DataTypeUtils;
 import es.pacofraggle.commons.GoogleSheetsFacade;
 import es.pacofraggle.commons.Msgs;
 import es.pacofraggle.commons.YAMLReader;
@@ -23,7 +24,7 @@ public class App {
 
   public static Msgs log = new Msgs(Msgs.DEBUG, true);
 
-  private static String[] imageExtensions = new String[]{"", ".jpg", ".jpeg", ".png", ".gif"};
+  private static String[] imageExtensions = new String[]{DataTypeUtils.EMPTY_STRING, ".jpg", ".jpeg", ".png", ".gif"};
 
   public App() {
     google = new GoogleSheetsFacade();
@@ -45,10 +46,10 @@ public class App {
       String filename = "salon-"+suffix+".csv";
 
       App.log.info("Reading Google Drive into " + filename);
-      filename = /*"salon-20160515_0822.csv";*/ google.getSpreadsheet((String) properties.get("googlesheet"), outputFolder, filename);
+      filename = "salon-20160518_1036.csv"; //google.getSpreadsheet((String) properties.get("googlesheet"), outputFolder, filename);
 
       App.log.info("Loading " + filename + " into the database");
-      csv.read(outputFolder+"/"+filename);
+      csv.read(outputFolder+File.separator+filename);
 
       Player[] players = Player.findAll();
       for(Player p : players) {
@@ -90,7 +91,7 @@ public class App {
     int[] value = new int[rows];
     for(int i = 0; i< rows; i++) {
       value[i] = players[i].getBadges().get(badge);
-      group[i] = App.findImage(properties.get("avatar-folder")+File.separator+players[i].getAvatarName()).getAbsolutePath();
+      group[i] = App.findImage(properties.get("avatar-folder")+File.separator+players[i].getAvatarName()).getPath();
     }
 
     StatsWriter stats = new StatsWriter(title, outputFolder, filename);
@@ -140,18 +141,18 @@ public class App {
       }
 
       String outputSuffix = (String) template.get("output-suffix");
-      if ((outputSuffix == null) || ("".equals(outputSuffix))) {
-        outputSuffix = "-Bar";
+      if ((outputSuffix == null) || (DataTypeUtils.EMPTY_STRING.equals(outputSuffix))) {
+        outputSuffix = "-bar";
       }
-      output = outputFolder+"/"+player.getName().toLowerCase()+outputSuffix+".png";
+      output = outputFolder+File.separator+player.getName().toLowerCase()+outputSuffix+".png";
 
       Map<String, String> data = new HashMap<String, String>();
       data.put("name", player.getName().toUpperCase());
-      data.put("morado", (badges.getMorado() < 10 ? " " : "")+Integer.toString(badges.getMorado()));
-      data.put("amarillo", (badges.getAmarillo() < 10 ? " " : "")+Integer.toString(badges.getAmarillo()));
-      data.put("azul", (badges.getAzul() < 10 ? " " : "")+Integer.toString(badges.getAzul()));
-      data.put("naranja", (badges.getNaranja() < 10 ? " " : "")+Integer.toString(badges.getNaranja()));
-      data.put("participaciones", (badges.getParticipaciones() < 10 ? " " : "")+Integer.toString(badges.getParticipaciones()));
+      data.put("morado", (badges.getMorado() < 10 ? DataTypeUtils.SPACE : DataTypeUtils.EMPTY_STRING)+Integer.toString(badges.getMorado()));
+      data.put("amarillo", (badges.getAmarillo() < 10 ? DataTypeUtils.SPACE : DataTypeUtils.EMPTY_STRING)+Integer.toString(badges.getAmarillo()));
+      data.put("azul", (badges.getAzul() < 10 ? DataTypeUtils.SPACE : DataTypeUtils.EMPTY_STRING)+Integer.toString(badges.getAzul()));
+      data.put("naranja", (badges.getNaranja() < 10 ? DataTypeUtils.SPACE : DataTypeUtils.EMPTY_STRING)+Integer.toString(badges.getNaranja()));
+      data.put("participaciones", (badges.getParticipaciones() < 10 ? DataTypeUtils.SPACE : DataTypeUtils.EMPTY_STRING)+Integer.toString(badges.getParticipaciones()));
 
       String source = (String) template.get("template");
       List elements = (List) template.get("element");
@@ -196,10 +197,10 @@ public class App {
       Arrays.sort(ignore);
 
       String outputSuffix = (String) template.get("output-suffix");
-      if ((outputSuffix == null) || ("".equals(outputSuffix))) {
+      if ((outputSuffix == null) || (DataTypeUtils.EMPTY_STRING.equals(outputSuffix))) {
         outputSuffix = "-ranking";
       }
-      output = outputFolder+"/"+game.getAvatarName()+outputSuffix+".jpg";
+      output = outputFolder+File.separator+game.getAvatarName()+outputSuffix+".jpg";
 
       List<Participation> list = Participation.findAll(null, game, event);
       for(int i=0; i<list.size(); i++) {
@@ -224,7 +225,7 @@ public class App {
           data.put("value", App.findImage(properties.get("games-folder")+File.separator+game.getAvatarName()));
           data.put("type", "image");
         } else if (key.startsWith("avatar")) {
-          int idx = Integer.parseInt(key.replaceFirst("avatar", ""))-1;
+          int idx = Integer.parseInt(key.replaceFirst("avatar", DataTypeUtils.EMPTY_STRING))-1;
           if (idx < ranking.length) {
             Participation p = ranking[idx];
             data.put("type", "image");
@@ -233,7 +234,7 @@ public class App {
             data.put("type", "discard");
           }
         } else if (key.startsWith("name")) {
-          int idx = Integer.parseInt(key.replaceFirst("name", ""))-1;
+          int idx = Integer.parseInt(key.replaceFirst("name", DataTypeUtils.EMPTY_STRING))-1;
           if (idx < ranking.length) {
             Participation p = ranking[idx];
             data.put("type", "text");
@@ -242,7 +243,7 @@ public class App {
             data.put("type", "discard");
           }
         } else if (key.startsWith("score")) {
-          int idx = Integer.parseInt(key.replaceFirst("score", ""))-1;
+          int idx = Integer.parseInt(key.replaceFirst("score", DataTypeUtils.EMPTY_STRING))-1;
           if (idx < ranking.length) {
             Participation p = ranking[idx];
             data.put("type", "text");
@@ -251,7 +252,7 @@ public class App {
             data.put("type", "discard");
           }
         } else if (key.startsWith("morado")) {
-          int idx = Integer.parseInt(key.replaceFirst("morado", ""))-1;
+          int idx = Integer.parseInt(key.replaceFirst("morado", DataTypeUtils.EMPTY_STRING))-1;
           if (idx < ranking.length) {
             Participation p = ranking[idx];
             data.put("type", p.getBadges().getMorado() > 0 ? "rectangle" : "discard");
@@ -285,6 +286,6 @@ public class App {
   }
 
   public static void main( String[] args ) {
-    App app = new App();
+    new App();
   }
 }

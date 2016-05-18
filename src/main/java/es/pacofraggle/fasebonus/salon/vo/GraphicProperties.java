@@ -1,5 +1,7 @@
 package es.pacofraggle.fasebonus.salon.vo;
 
+import es.pacofraggle.commons.DataTypeUtils;
+
 import java.awt.*;
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -9,14 +11,14 @@ public class GraphicProperties {
 
   public int x = -1;
   public int y = -1;
-  public String type = "";
+  public String type = DataTypeUtils.EMPTY_STRING;
   public Color colour = null;
 
-  public String value = "";
-  public String numberFormat = "";
+  public String value = DataTypeUtils.EMPTY_STRING;
+  public String numberFormat = DataTypeUtils.EMPTY_STRING;
   public int fontWeight = -1;
   public int fontSize = -1;
-  public String font = "";
+  public String font = DataTypeUtils.EMPTY_STRING;
 
   public int boxX = -1;
   public int boxY = -1;
@@ -50,14 +52,14 @@ public class GraphicProperties {
     type = GraphicProperties.safeGet(data, "type", "text").toLowerCase();
     x = GraphicProperties.safeGetInt(data, "x", 0);
     y = GraphicProperties.safeGetInt(data, "y", 0);
-    value = GraphicProperties.safeGet(data, "value", "");
+    value = GraphicProperties.safeGet(data, "value", DataTypeUtils.EMPTY_STRING);
 
-    numberFormat = GraphicProperties.safeGet(data, "number-format", "");
+    numberFormat = GraphicProperties.safeGet(data, "number-format", DataTypeUtils.EMPTY_STRING);
 
     boxX = GraphicProperties.safeGetInt(data, "box-x", 0);
     boxY = GraphicProperties.safeGetInt(data, "box-y", 0);
 
-    textAlign = GraphicProperties.stringToTextAlign(GraphicProperties.safeGet(data, "text-align", ""));
+    textAlign = GraphicProperties.stringToTextAlign(GraphicProperties.safeGet(data, "text-align", DataTypeUtils.EMPTY_STRING));
 
     if (data.get("font-weight") != null) {
       String weight = GraphicProperties.safeGet(data, "font-weight", "0");

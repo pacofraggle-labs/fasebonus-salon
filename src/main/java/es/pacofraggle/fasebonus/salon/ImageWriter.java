@@ -1,5 +1,6 @@
 package es.pacofraggle.fasebonus.salon;
 
+import es.pacofraggle.commons.DataTypeUtils;
 import es.pacofraggle.fasebonus.salon.vo.GraphicProperties;
 
 import javax.imageio.ImageIO;
@@ -69,7 +70,7 @@ public class ImageWriter implements ImageObserver {
   }
 
   public void applyText(Graphics g, int x, int y, String value, String fontName, int fontWeight, int fontSize, int chars, String format, int textAlign) {
-    if (!("".equals(format)) && !(format == null)) {
+    if (!(DataTypeUtils.EMPTY_STRING.equals(format)) && !(format == null)) {
       DecimalFormatSymbols symbols = new DecimalFormatSymbols();
       symbols.setGroupingSeparator('.');
       symbols.setDecimalSeparator(',');
@@ -81,7 +82,7 @@ public class ImageWriter implements ImageObserver {
       if (textAlign == GraphicProperties.TEXT_ALIGN_RIGHT) {
         StringBuilder sb = new StringBuilder(value);
         while(sb.length() < chars) {
-          sb.insert(0, " ");
+          sb.insert(0, DataTypeUtils.SPACE);
         }
         value = sb.toString();
       }

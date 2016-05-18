@@ -1,5 +1,6 @@
 package es.pacofraggle.fasebonus.salon.model;
 
+import es.pacofraggle.commons.DataTypeUtils;
 import es.pacofraggle.fasebonus.salon.vo.Badges;
 
 import java.util.*;
@@ -118,7 +119,7 @@ public final class Participation {
   }
 
   public static Participation add(Player player, Game game, Event event, String record, Badges badges) {
-    if ((record == null) || (record.trim().equals("0")) || (record.trim().equals(""))) {
+    if ((record == null) || (record.trim().equals("0")) || (record.trim().equals(DataTypeUtils.EMPTY_STRING))) {
       return null;
     }
 

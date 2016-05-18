@@ -1,5 +1,6 @@
 package es.pacofraggle.fasebonus.salon.model;
 
+import es.pacofraggle.commons.DataTypeUtils;
 import es.pacofraggle.fasebonus.salon.vo.Badges;
 
 import java.util.ArrayList;
@@ -49,7 +50,7 @@ public final class Game {
 
   public String getAvatarName() {
     String[] parts = name.split("\\(");
-    String result = parts[0].toLowerCase().replaceAll("\\W", "");
+    String result = parts[0].toLowerCase().replaceAll("\\W", DataTypeUtils.EMPTY_STRING);
 
     return result.length() > 20 ? result.substring(0, 20) : result;
   }
@@ -123,7 +124,7 @@ public final class Game {
   }
 
   public static Game add(String name, String chooser, String category, String system) {
-    Player p = (chooser == null) || ("".equals(chooser.trim())) ? null : Player.add(chooser, new Badges());
+    Player p = (chooser == null) || (DataTypeUtils.EMPTY_STRING.equals(chooser.trim())) ? null : Player.add(chooser, new Badges());
 
     return Game.add(name, p, category, system);
   }

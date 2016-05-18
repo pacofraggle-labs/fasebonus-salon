@@ -1,5 +1,6 @@
 package es.pacofraggle.fasebonus.salon;
 
+import es.pacofraggle.commons.DataTypeUtils;
 import es.pacofraggle.fasebonus.salon.model.Event;
 import es.pacofraggle.fasebonus.salon.model.Game;
 import es.pacofraggle.fasebonus.salon.model.Participation;
@@ -29,7 +30,7 @@ public class CSVReader {
         for(String p : players.keySet()) {
           Player.add(p, new Badges());
         }
-      } else if (CSVReader.safeGet(record, 0).equals("")) {
+      } else if (CSVReader.safeGet(record, 0).equals(DataTypeUtils.EMPTY_STRING)) {
         if (players != null) {
           String badge = record.get(4).trim().toLowerCase();
           for(String name : players.keySet()) {
@@ -65,7 +66,7 @@ public class CSVReader {
             int idx = players.get(name);
             String score = CSVReader.safeGet(record, idx);
             Badges badges = Badges.parseBadges(record.get(idx + 1));
-            if ((!score.equals("")) && (!score.equals("0")) && (!badges.isEmpty())) {
+            if ((!score.equals(DataTypeUtils.EMPTY_STRING)) && (!score.equals("0")) && (!badges.isEmpty())) {
               Participation part = Participation.add(p, g, e, score, badges);
             }
           }
@@ -76,7 +77,7 @@ public class CSVReader {
   }
 
   private static String safeGet(CSVRecord record, int column) {
-    return record.size() > column ? record.get(column).trim() : "";
+    return record.size() > column ? record.get(column).trim() : DataTypeUtils.EMPTY_STRING;
   }
 
   private int findPlayers1stColumn(CSVRecord record) {
