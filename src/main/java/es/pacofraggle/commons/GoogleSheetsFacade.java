@@ -5,14 +5,14 @@ import java.net.URL;
 
 public class GoogleSheetsFacade {
 
-  public String getSpreadsheet(String id, String outputFolder, String filename) {
+  public String getSpreadsheet(String id, String gid, String outputFolder, String filename) {
 
     InputStreamReader isr = null;
     BufferedReader in = null;
     Writer ofw = null;
     PrintWriter out = null;
     try {
-      URL doc = new URL("https://docs.google.com/spreadsheets/d/"+id+"/export?format=csv&id="+id+"&gid=0");
+      URL doc = new URL("https://docs.google.com/spreadsheets/d/"+id+"/export?format=csv&id="+id+"&gid="+gid);
       isr = new InputStreamReader(doc.openStream());
       in = new BufferedReader(isr);
       ofw = new FileWriter(outputFolder+File.separator+filename);

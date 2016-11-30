@@ -102,8 +102,8 @@ public final class Player {
     return p;
   }
 
-  public Badges sumBadges() {
-    return Participation.sumBadges(this.participations);
+  public Badges sumBadges(List<Event> ignore) {
+    return Participation.sumBadges(this.participations, ignore);
   }
 
   public static Player[] orderByBadge(String badge) {

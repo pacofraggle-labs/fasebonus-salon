@@ -113,7 +113,7 @@ public class ParticipationTest {
       n += part.getBadges().getNaranja();
       p += part.getBadges().getParticipaciones();
     }
-    Badges badges = Participation.sumBadges();
+    Badges badges = Participation.sumBadges(null);
     TestsHelper.assertBadges(badges, m, a, z, n, p);
   }
 

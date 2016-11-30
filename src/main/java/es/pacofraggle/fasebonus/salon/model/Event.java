@@ -10,6 +10,7 @@ public final class Event {
 
   private String name;
   private Set<Participation> participations = new HashSet<Participation>();
+  private Set<Game> games = new HashSet<Game>();
 
   public Event(String name) {
     this.name = name;
@@ -79,7 +80,35 @@ public final class Event {
     return e;
   }
 
-  public Badges sumBadges() {
-    return Participation.sumBadges(this.participations);
+  public Badges sumBadges(List<Event> ignore) {
+    return Participation.sumBadges(this.participations, ignore);
+  }
+
+  public Player[] getPlayers() {
+    Set<Player> result = new HashSet<Player>();
+    for(Participation p : participations) {
+      result.add(p.getPlayer());
+    }
+
+    return result.toArray(new Player[result.size()]);
+  }
+
+  public Set<Participation> getParticipations(String player) {
+    Set<Participation> result = new HashSet<Participation>();
+    for(Participation p : participations) {
+      if (player.equals(p.getPlayer().getName())) {
+        result.add(p);
+      }
+    }
+
+    return result;
+  }
+
+  public void addGame(Game g) {
+    games.add(g);
+  }
+
+  public Game[] getGames() {
+    return games.toArray(new Game[games.size()]);
   }
 }

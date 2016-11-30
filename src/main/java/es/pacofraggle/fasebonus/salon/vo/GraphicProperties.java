@@ -33,7 +33,6 @@ public class GraphicProperties {
   private GraphicProperties defaultProp;
 
   public GraphicProperties() {
-    defaultProp = null;
   }
 
   public GraphicProperties(GraphicProperties defaultProp) {

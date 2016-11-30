@@ -13,13 +13,20 @@ public final class Participation {
   private Event event;
   private String record;
   private Badges badges;
+  private String date;
 
-  public Participation(Player player, Game game, Event event, String record, Badges badges) {
+
+  public Participation(Player player, Game game, Event event, String record, Badges badges, String date) {
     this.player = player;
     this.game = game;
     this.event = event;
     this.record = record;
     this.badges = badges;
+    this.date = date;
+  }
+
+  public Participation(Player player, Game game, Event event, String record, Badges badges) {
+    this(player, game, event, record, badges, null);
   }
 
   public Player getPlayer() {
@@ -48,6 +55,10 @@ public final class Participation {
     } else {
       this.badges.addBadges(badges);
     }
+  }
+
+  public String getDate() {
+    return date;
   }
 
   @Override
@@ -152,17 +163,18 @@ public final class Participation {
     return result;
   }
 
-  public static Badges sumBadges() {
-    return Participation.sumBadges(Participation.table);
+  public static Badges sumBadges(List<Event> ignore) {
+    return Participation.sumBadges(Participation.table, ignore);
   }
 
-  public static Badges sumBadges(Set<Participation> participations) {
+  public static Badges sumBadges(Set<Participation> participations, List<Event> ignore) {
     Badges result = new Badges();
-
     Set<String> events = new HashSet<String>();
     for(Participation participation : participations) {
-      events.add(participation.getEvent().getName());
-      result.addBadges(participation.getBadges());
+      if ((ignore == null) || (!ignore.contains(participation.getEvent()))) {
+        events.add(participation.getEvent().getName());
+        result.addBadges(participation.getBadges());
+      }
     }
 
     result.setParticipaciones(events.size());

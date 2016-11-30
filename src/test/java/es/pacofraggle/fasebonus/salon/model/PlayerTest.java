@@ -93,7 +93,7 @@ public class PlayerTest {
     player.addParticipation(new Participation(player, TestsHelper.createGame(player, "1"), TestsHelper.createEvent("1"), "6", new Badges(2, 3, 1, 5, 2)));
     player.addParticipation(new Participation(player, TestsHelper.createGame(player, "2"), TestsHelper.createEvent("2"), "7", new Badges(1, 2, 8, 2, 3)));
 
-    Badges badges = player.sumBadges();
+    Badges badges = player.sumBadges(null);
     TestsHelper.assertBadges(badges, 5, 7, 11, 9, 3);
   }
 }

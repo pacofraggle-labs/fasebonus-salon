@@ -110,6 +110,10 @@ public final class Game {
       result.add(p.getGame());
     }
 
+    for(Game game : event.getGames()) {
+      result.add(game);
+    }
+
     return result.toArray(new Game[result.size()]);
   }
 
@@ -139,7 +143,7 @@ public final class Game {
     return g;
   }
 
-  public Badges sumBadges() {
-    return Participation.sumBadges(this.participations);
+  public Badges sumBadges(List<Event> ignore) {
+    return Participation.sumBadges(this.participations, ignore);
   }
 }

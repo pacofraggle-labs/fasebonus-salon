@@ -12,9 +12,9 @@ import java.util.Arrays;
 
 import static org.junit.Assert.*;
 
-public class CSVReadTest {
+public class CSVRecordsTableReaderTest {
 
-  private CSVReader csv;
+  private CSVDataLoader csv;
   private String[] exisitingPlayers;
 
   @Before
@@ -24,7 +24,7 @@ public class CSVReadTest {
     Game.clear();
     Event.clear();
 
-    csv = new CSVReader();
+    csv = new CSVDataLoader();
 
     exisitingPlayers = "Araubi,Autorithy,Balthier,Batorre3,Beaches,Beornida,Bubu,Carlosblansa,Ciberchuso,CrankyKong,Cratero,DanySnowman,DemolitionMan,DolphLundgren,Elbitxo,Falsworth,Franelillas,FranFormol,Gamemaster,GarcesEs,Gaunt,Hellboy,Hipnosapo,Hoz3,HyLian,Imanolea,Jarrylsusio,Jauma80,JaviBonus,Kalzakalth,Kanirasta,Karakandao,Leia83,Logaran,LocoMJ,Luckpro,MaeseThreepwood,Magneto,MarcMax,Marcostegui,Martian,Masticador,Mikes,Moncara,MorbidMe,NandiusC,Nekopaki,Nuvalo,Pacofraggle,Periko,Perrosoy,PocketLucho,Premutor,PsychoFox,Puskax,RackProject,Raiders,Ramonth,Ricco,r0n1n,RobieInie,RudoStyle,Saigononindou,Salariasa,Setne,Sir.Arthur,Sito5sas,Srpresley,Tamariz,Terkai,Teyume,Tocandolospixeles,Wolfcult,Zael".split(",");
     Arrays.sort(exisitingPlayers);
@@ -41,7 +41,7 @@ public class CSVReadTest {
   @Test
   public void testRead() {
     try {
-      csv.read("src/test/data/salon-20160501_1006.csv");
+      csv.readHistorico("src/test/data/salon-20160501_1006.csv");
 
       for(String name : exisitingPlayers) {
         Player p = Player.find(name);
