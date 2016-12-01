@@ -91,6 +91,7 @@ public final class Participation {
       ", event=" + event +
       ", record='" + record + '\'' +
       ", badges=" + badges +
+      ", date=" + date +
       '}';
   }
 

@@ -14,7 +14,7 @@ public class CSVUtils {
   public static int findColumnNumber(String value, CSVRecord record) {
     int ini = Integer.MIN_VALUE;
     for(int i=0; i<record.size(); i++) {
-      if ("Salón".equals(record.get(i))) {
+      if (value.equals(record.get(i))) {
         ini = i;
         break;
       }

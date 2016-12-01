@@ -80,7 +80,7 @@ public class CSVDataLoader {
     }
   }
 
-  public List<Participation> readPuntuaciones(String filename, String eventId) throws Exception {
+  public List<Participation> readPuntuaciones(String filename, Event ev) throws Exception {
     File file = new File(filename);
     CSVParser parser = CSVParser.parse(file, Charset.forName("UTF-8"), CSVFormat.RFC4180);
 
@@ -100,12 +100,16 @@ public class CSVDataLoader {
         scoreCol = CSVUtils.findColumnNumber("Puntuación", record);
         dateCol = CSVUtils.findColumnNumber("Fecha", record);
       } else {
-        String game = CSVUtils.safeGet(record, gameCol);
         String event = CSVUtils.safeGet(record, eventCol);
+        Event e = Event.find(event);
+        if (ev != e) {
+          continue;
+        }
+
+        String game = CSVUtils.safeGet(record, gameCol);
         String player = CSVUtils.safeGet(record, playerCol);
         String score = CSVUtils.safeGet(record, scoreCol);
         String date = CSVUtils.safeGet(record, dateCol);
-        Event e = Event.find(event);
         Player p = Player.find(player);
         Game g = null;
         for(Game gm : e.getGames()) {

@@ -3,9 +3,11 @@ package es.pacofraggle.fasebonus.salon;
 import es.pacofraggle.commons.*;
 import es.pacofraggle.fasebonus.salon.model.Event;
 import es.pacofraggle.fasebonus.salon.model.Game;
+import es.pacofraggle.fasebonus.salon.model.Participation;
 import es.pacofraggle.fasebonus.salon.model.Player;
 
 import java.io.*;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -68,6 +70,11 @@ public class App {
 
       badges = new String[]{ "morado", "amarillo", "azul", "naranja" };
       csvw.playerBadgesReport(badges, outputFolder, "player_badges-" + suffix + ".csv");
+
+      filename = google.getSpreadsheet((String) properties.get("googlesheet"), (String) properties.get("puntuaciones-gid"), outputFolder, filename);
+      App.log.info("Loading " + filename + " individual scores");
+      List<Participation> scores = csvr.readPuntuaciones(outputFolder + File.separator + filename, event);
+      stats.eventProgress(event, scores, "2016-10-30", "2016-12-10", suffix, outputFolder);
 
     } catch (Exception e) {
       App.log.error(e);
