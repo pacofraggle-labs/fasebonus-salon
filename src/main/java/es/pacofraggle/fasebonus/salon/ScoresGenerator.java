@@ -140,6 +140,12 @@ public class ScoresGenerator {
       }
       Participation[] ranking = Participation.orderByRecord(list);
 
+      int i=1;
+      for(Participation p : ranking) {
+        System.out.println("    "+i+". "+p.getPlayer().getName()+" "+p.getRecord());
+        i++;
+      }
+
       String source = (String) template.get("template");
       List elements = (List) template.get("element");
       GraphicProperties defaultProp = new GraphicProperties(template);

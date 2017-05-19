@@ -15,12 +15,14 @@ import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.time.TimeSeriesDataItem;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.List;
 
 public class GraphReporting {
 
@@ -54,11 +56,12 @@ public class GraphReporting {
       ds.addValue((double) value[i], group[i], "");
     }
     JFreeChart chart = ChartFactory.createBarChart(title, "Jugador", badge, ds);
+    chart.setBackgroundPaint(Color.WHITE);
 
     String result;
     try {
       String file = buildFileName(outputFolder, filename);
-      ChartUtilities.saveChartAsJPEG(new File(file), chart, 800, 600);
+      ChartUtilities.saveChartAsJPEG(new File(file), chart, 1000, 500);
 
       result = file;
     } catch (IOException e) {
@@ -103,7 +106,7 @@ public class GraphReporting {
       Date ini = df.parse(from);
       Date end = df.parse(to);
 
-      TimeSeries totalSeries = new TimeSeries("Records publicados");
+      TimeSeries totalSeries = new TimeSeries("Puntuaciones publicadas");
       Iterator<Date> it = totalData.keySet().iterator();
       while(it.hasNext()) {
         Date d = it.next();
@@ -112,10 +115,11 @@ public class GraphReporting {
 
       TimeSeriesCollection ds = new TimeSeriesCollection();
       ds.addSeries(totalSeries);
-      JFreeChart chart = ChartFactory.createTimeSeriesChart("Records subidos", "Día", "Records", ds);
+      JFreeChart chart = ChartFactory.createTimeSeriesChart("Puntuaciones publicadas", "Fecha", "Records", ds);
+      chart.getPlot().setBackgroundPaint(Color.WHITE);
       ((XYPlot) chart.getPlot()).setRenderer(new XYStepRenderer());
       String file = buildFileName(outputFolder, "records-"+event.getName()+"-"+suffix)+".jpg";
-      ChartUtilities.saveChartAsJPEG(new File(file), chart, 800, 600);
+      ChartUtilities.saveChartAsJPEG(new File(file), chart, 800, 500);
 
 
       for(Game g : event.getGames()) {
@@ -127,6 +131,7 @@ public class GraphReporting {
         boolean hasData = false;
         System.out.println(g.getName());
         Iterator<String> players = playersData.keySet().iterator();
+        int numSeries = 0;
         while(players.hasNext()) {
           String player = players.next();
           TimeSeries series = playersData.get(player);
@@ -134,15 +139,21 @@ public class GraphReporting {
             series.addOrUpdate(new Day(ini), 0);
             series.addOrUpdate(new Day(end), series.getMaxY());
             ds.addSeries(series);
+            numSeries++;
             System.out.println("  " + player + ": " + GraphReporting.timeSeriesToString(series));
             hasData = true;
           }
         }
         if (hasData) {
-          JFreeChart gameChart = ChartFactory.createTimeSeriesChart("Salón "+event.getName()+". "+g.getName(), "Día", "Records", ds);
+          Stroke stroke = new BasicStroke(3f);
+          JFreeChart gameChart = ChartFactory.createTimeSeriesChart("Salón "+event.getName()+". "+g.getName(), "Fecha", "Records", ds);
+          gameChart.getPlot().setBackgroundPaint(Color.WHITE);
           ((XYPlot) gameChart.getPlot()).setRenderer(new XYStepRenderer());
+          for(int i=0; i<numSeries; i++) {
+            ((XYPlot) gameChart.getPlot()).getRenderer().setSeriesStroke(i, stroke);
+          }
           String gameFile = buildFileName(outputFolder, "records-"+event.getName()+"-"+g.getAvatarName())+".jpg";
-          ChartUtilities.saveChartAsJPEG(new File(gameFile), gameChart, 800, 600);
+          ChartUtilities.saveChartAsJPEG(new File(gameFile), gameChart, 800, 500);
         }
       }
 

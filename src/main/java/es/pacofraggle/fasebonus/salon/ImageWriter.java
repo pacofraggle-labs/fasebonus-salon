@@ -65,6 +65,7 @@ public class ImageWriter implements ImageObserver {
 
       g.drawImage(image2, x, boxY, boxX-x, y-boxY, this);
     } catch(Exception e) {
+      System.err.println("Problem with "+file);
       e.printStackTrace();
     }
   }

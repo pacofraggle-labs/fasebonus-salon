@@ -38,7 +38,8 @@ public class CSVDataLoader {
           String badge = record.get(4).trim().toLowerCase();
           for(String name : players.keySet()) {
             int idx = players.get(name);
-            int value = Integer.parseInt(CSVUtils.safeGet(record, idx));
+            String val = CSVUtils.safeGet(record, idx);
+            int value = DataTypeUtils.EMPTY_STRING.equals(val) ? 0 : Integer.parseInt(val);
             Player p = Player.find(name);
             Badges b = p.getBadges();
             if (badge.equals("participaciones")) {

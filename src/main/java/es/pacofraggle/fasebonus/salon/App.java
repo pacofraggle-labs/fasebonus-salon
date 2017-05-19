@@ -43,7 +43,7 @@ public class App {
       App.log.info("Loading " + filename + " into the database");
       csvr.readHistorico(outputFolder + File.separator + filename);
 
-      String currenEvent = "24";
+      String currenEvent = "27";
 
       Event event = Event.find(currenEvent);
       App.log.debug(event);
@@ -71,10 +71,11 @@ public class App {
       badges = new String[]{ "morado", "amarillo", "azul", "naranja" };
       csvw.playerBadgesReport(badges, outputFolder, "player_badges-" + suffix + ".csv");
 
+      filename = "salon-"+suffix+"-puntuaciones.csv";
       filename = google.getSpreadsheet((String) properties.get("googlesheet"), (String) properties.get("puntuaciones-gid"), outputFolder, filename);
       App.log.info("Loading " + filename + " individual scores");
       List<Participation> scores = csvr.readPuntuaciones(outputFolder + File.separator + filename, event);
-      stats.eventProgress(event, scores, "2016-10-30", "2016-12-10", suffix, outputFolder);
+      stats.eventProgress(event, scores, "2017-03-01", "2017-04-09", suffix, outputFolder);
 
     } catch (Exception e) {
       App.log.error(e);
