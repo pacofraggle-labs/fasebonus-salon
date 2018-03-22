@@ -29,7 +29,7 @@ public class ScoresGenerator {
   public void playersScores(List<Event> ignore, String outputFolder) {
       Player[] players = Player.findAll();
       for(Player p : players) {
-        playerScore(p, true, ignore, "player-score-tron.yaml", outputFolder);
+        playerScore(p, true, ignore, "player-score-mario.yaml", outputFolder);
       }
   }
 

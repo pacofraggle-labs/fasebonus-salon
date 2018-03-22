@@ -55,6 +55,16 @@ public final class Game {
     return result.length() > 20 ? result.substring(0, 20) : result;
   }
 
+  public String getFileName() {
+    String[] parts = name.split("\\(");
+    String result = parts[0].toLowerCase().replaceAll("\\W", "_");
+    if ((system != null) && (!DataTypeUtils.EMPTY_STRING.equals(system))) {
+      result += "-"+system.replaceAll("\\W", "_");
+    }
+
+    return result;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
