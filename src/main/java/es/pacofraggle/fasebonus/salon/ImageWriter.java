@@ -60,6 +60,7 @@ public class ImageWriter implements ImageObserver {
   }
 
   public void applyImage(Graphics g, int x, int y, int boxX, int boxY, String file) {
+      System.out.println(">> ("+x+","+y+") ("+boxX+","+boxY+") "+file);
     try {
       BufferedImage image2 = ImageIO.read(new File(file));
 

@@ -29,7 +29,7 @@ public class ScoresGenerator {
   public void playersScores(List<Event> ignore, String outputFolder) {
       Player[] players = Player.findAll();
       for(Player p : players) {
-        playerScore(p, true, ignore, "player-score-mario.yaml", outputFolder);
+        playerScore(p, true, ignore, "player-score-mario-stars.yaml", outputFolder);
       }
   }
 
@@ -65,18 +65,42 @@ public class ScoresGenerator {
       data.put("naranja", (badges.getNaranja() < 10 ? DataTypeUtils.SPACE : DataTypeUtils.EMPTY_STRING)+Integer.toString(badges.getNaranja()));
       data.put("participaciones", (badges.getParticipaciones() < 10 ? DataTypeUtils.SPACE : DataTypeUtils.EMPTY_STRING)+Integer.toString(badges.getParticipaciones()));
 
+      Game[] torneos = Game.findAll("--Torneo 1on1", null, null);
+      int stars = 0;
+      if (torneos.length > 0) {
+        List<Participation> ps = Participation.findAll(player, torneos[0], null);
+        for(Participation p : ps) {
+          if ("1".equals(p.getRecord())) {
+            stars++;
+          }
+        }
+        if (stars > 0) {
+          data.put("extra", "x"+Integer.toString(stars));
+        } else {
+          data.put("extra", null);
+        }
+      }
+
       String source = (String) template.get("template");
       List elements = (List) template.get("element");
       GraphicProperties defaultProp = new GraphicProperties(template);
+      Object starElm = null;
       for(Object element : elements) {
         Map elm = (Map) element;
         String key = (String) elm.keySet().iterator().next();
+        if ("star".equals(key)) {
+          starElm = element;
+        }
         if (data.get(key) != null) {
           Map values = (Map) elm.get(key);
 
           values.put("type", "text");
           values.put("value", data.get(key));
         }
+      }
+
+      if (stars == 0) {
+        elements.remove(starElm);
       }
 
       //System.out.println(template);
@@ -100,8 +124,10 @@ public class ScoresGenerator {
     // Game rankings
     Game[] list = event.getGames();
     for(Game game : list) {
-      App.log.debug("  " + game.getName() + " " + game.getSystem() + " " + game.getCategory());
-      eventGameScore(game, event, "ranking.yaml", outputFolder);
+      if (!game.isSpecial()) {
+        App.log.debug("  " + game.getName() + " " + game.getSystem() + " " + game.getCategory());
+        eventGameScore(game, event, "ranking.yaml", outputFolder);
+      }
     }
   }
 

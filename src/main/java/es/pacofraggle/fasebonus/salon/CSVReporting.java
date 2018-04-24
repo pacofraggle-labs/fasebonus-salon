@@ -196,8 +196,10 @@ public class CSVReporting {
       Arrays.sort(ignore);
 
       for(Game g : Game.findAll()) {
-        System.out.println("Ranking for "+g.getName()+" - "+g.getSystem());
-        gameRankingReport(g, outputFolder, "ranking-" + g.getFileName() + ".csv", ignore);
+        if (!g.isSpecial()) {
+          System.out.println("Ranking for " + g.getName() + " - " + g.getSystem());
+          gameRankingReport(g, outputFolder, "ranking-" + g.getFileName() + ".csv", ignore);
+        }
       }
     } catch (FileNotFoundException e) {
       e.printStackTrace();

@@ -43,7 +43,7 @@ public class App {
       App.log.info("Loading " + filename + " into the database");
       csvr.readHistorico(outputFolder + File.separator + filename);
 
-      String currenEvent = "30";
+      String currenEvent = (String) properties.get("current-edition");
 
       Event event = Event.find(currenEvent);
       App.log.debug(event);
@@ -53,7 +53,6 @@ public class App {
 
       // Players
       gen.playersScores(ignore, outputFolder);
-
 
       // Game rankings
       gen.eventGamesScores(event, outputFolder);
@@ -75,9 +74,10 @@ public class App {
       filename = google.getSpreadsheet((String) properties.get("googlesheet"), (String) properties.get("puntuaciones-gid"), outputFolder, filename);
       App.log.info("Loading " + filename + " individual scores");
       List<Participation> scores = csvr.readPuntuaciones(outputFolder + File.separator + filename, event);
-      stats.eventProgress(event, scores, "2017-12-20", "2018-03-23", suffix, outputFolder);
+      stats.eventProgress(event, scores, (String) properties.get("current-edition-from"), (String) properties.get("current-edition-to"), suffix, outputFolder);
 
       csvw.gamesRankingReports(Game.findAll(), "ranking.yaml", outputFolder);
+
     } catch (Exception e) {
       App.log.error(e);
     }
