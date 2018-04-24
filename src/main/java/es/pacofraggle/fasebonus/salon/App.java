@@ -52,7 +52,7 @@ public class App {
       //ignore.add(event);
 
       // Players
-      gen.playersScores(ignore, outputFolder);
+      gen.playersScores(ignore, outputFolder, (String) properties.get("player-bar"));
 
       // Game rankings
       gen.eventGamesScores(event, outputFolder);

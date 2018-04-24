@@ -26,10 +26,10 @@ public class ScoresGenerator {
     this.properties = properties;
   }
 
-  public void playersScores(List<Event> ignore, String outputFolder) {
+  public void playersScores(List<Event> ignore, String outputFolder, String yamlFile) {
       Player[] players = Player.findAll();
       for(Player p : players) {
-        playerScore(p, true, ignore, "player-score-mario-stars.yaml", outputFolder);
+        playerScore(p, true, ignore, yamlFile, outputFolder);
       }
   }
 

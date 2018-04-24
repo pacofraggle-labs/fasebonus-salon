@@ -1,7 +1,8 @@
 #!/bin/bash
 
-mvn clean compile exec:java -Dexec.mainClass=es.pacofraggle.fasebonus.salon.App
-
-if [ $# -gt 0 ] && [ -d $HOME/Dropbox/Public/fb/rank/$1 ]; then
-  mv tmp/*ranking.png $HOME/Dropbox/Public/fb/rank/$1
+if [ $# -gt 0 ] && [ $1 == "--rebuild" ]; then
+  opts="clean compile "
+else
+  opts=""
 fi
+mvn $opts exec:java -Dexec.mainClass=es.pacofraggle.fasebonus.salon.App
