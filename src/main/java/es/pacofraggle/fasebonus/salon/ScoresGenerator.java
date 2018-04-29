@@ -27,10 +27,10 @@ public class ScoresGenerator {
   }
 
   public void playersScores(List<Event> ignore, String outputFolder, String yamlFile) {
-      Player[] players = Player.findAll();
-      for(Player p : players) {
-        playerScore(p, true, ignore, yamlFile, outputFolder);
-      }
+    Player[] players = Player.findAll();
+    for(Player p : players) {
+      playerScore(p, true, ignore, yamlFile, outputFolder);
+    }
   }
 
   public String playerScore(Player player, boolean calculateBadges, List<Event> ignore, String yml, String outputFolder) {
@@ -228,5 +228,33 @@ public class ScoresGenerator {
     }
 
     return output;
+  }
+
+  public void checkRequiredFiles(Event event) {
+    boolean missing = false;
+    for(Game game : event.getGames()) {
+      File f = FileUtils.findImage(properties.get("games-folder") + File.separator + game.getAvatarName());
+      if (!f.exists()) {
+        App.log.warn("   No banner image for "+game.getName()+" found ["+f.getName()+"]");
+        missing = true;
+      }
+    }
+
+    if (missing) {
+      App.log.warn("");
+    }
+
+    boolean missing2 = false;
+    for(Player player : event.getPlayers()) {
+      File f = FileUtils.findImage(properties.get("avatar-folder")+File.separator+player.getAvatarName());
+      if (!f.exists()) {
+        App.log.warn("   No avatar image for "+player.getName()+" found ["+f.getName()+"]");
+        missing2 = true;
+      }
+    }
+
+    if ((!missing) && (!missing2)) {
+      App.log.info("  All set for event: "+event.getName());
+    }
   }
 }
